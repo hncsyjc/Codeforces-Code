@@ -1,0 +1,39 @@
+#include <cstdio>
+
+using namespace std;
+
+const int MAXN = 501;
+const int MAXQ = 400001;
+const int MAXM = 500001;
+const int dx[] = {0, 1, -1, 0, 0};
+const int dy[] = {0, 0, 0, 1, -1};
+
+int n, m, sx, sy, tx, ty, cnt, t, num[MAXN][MAXN][2], qx[MAXQ], qy[MAXQ];
+char a[MAXN][MAXN];
+bool v[MAXN * MAXN];
+
+int main() {
+	scanf("%d%d", &n, &m);
+	for (int i = 1; i <= n; i++) scanf("%s", a[i] + 1);
+	scanf("%d%d", &sx, &sy);
+	scanf("%d%d", &tx, &ty);
+	int l = 0, r = 0; r++; qx[r] = sx; qy[r] = sy;
+	while (l < r) {
+		l++;
+		for (int d = 1; d <= 4; d++) {
+			int nx = qx[l] + dx[d];
+			int ny = qy[l] + dy[d];
+			if (nx == tx && ny == ty && a[tx][ty] == 'X') {
+				return printf("YES\n"), 0;
+			}
+			if (a[nx][ny] == '.') {
+				r++;
+				qx[r] = nx;
+				qy[r] = ny;
+				a[nx][ny] = 'X';
+			}
+		}
+	}
+	printf("NO\n");
+	return 0;
+}
