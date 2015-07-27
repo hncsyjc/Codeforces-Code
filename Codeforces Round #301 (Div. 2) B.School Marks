@@ -1,0 +1,28 @@
+#include <cstdio>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 1001;
+
+int n, k, p, x, y, a[MAXN], b[MAXN];
+
+int main() {
+	scanf("%d%d%d%d%d", &n, &k, &p, &x, &y);
+	for (int i = 1; i <= k; i++) {
+		scanf("%d", a + i);
+		x -= a[i];
+	}
+	if (x < 0) return printf("-1\n"), 0;
+	for (int i = k + 1; i <= n; i++) {
+		a[i] = min(x - (n - i), min(p, y));
+		if (a[i] <= 0) return printf("-1\n"), 0;
+		x -= a[i];
+	}
+	for (int i = 1; i <= n; i++) b[i] = a[i];
+	sort(a + 1, a + n + 1);
+	if (a[n / 2 + 1] < y) return printf("-1\n"), 0;
+	for (int i = k + 1; i <= n; i++)
+		printf("%d%c", b[i], " \n"[i == n]);
+	return 0;
+}
