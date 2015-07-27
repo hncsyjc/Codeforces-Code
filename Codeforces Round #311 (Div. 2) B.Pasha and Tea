@@ -1,0 +1,29 @@
+#include <cstdio>
+#include <algorithm>
+#include <cstring>
+#include <vector>
+#include <cstdlib>
+#include <iostream>
+#include <set>
+#define MAXN 100001
+using namespace std;
+const int INF=~0u>>2;
+int n,w,a[MAXN*2],boy[MAXN],girl[MAXN];
+int main() {
+    scanf("%d%d",&n,&w);
+    double minboy=INF,mingirl=INF;
+    for (int i=1;i<=2*n;i++) scanf("%d",a+i);
+    sort(a+1,a+2*n+1);
+    for (int i=1;i<=n;i++) {
+      girl[i]=a[i];
+      mingirl=min(mingirl,(double)girl[i]);
+    }
+    for (int i=1;i<=n;i++) {
+      boy[i]=a[n+i];
+      minboy=min(minboy,(double)boy[i]);
+    }
+    if (minboy>mingirl*2) minboy=mingirl*2;
+    else mingirl=minboy/2;
+    printf("%.6f\n",min((double)w,(mingirl+minboy)*n));
+    return 0;
+}
