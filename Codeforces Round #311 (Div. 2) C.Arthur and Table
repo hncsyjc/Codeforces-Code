@@ -1,0 +1,59 @@
+#include <cstdio>
+#include <cstring>
+#include <cassert>
+#include <vector>
+#include <cstdlib>
+#include <set>
+#include <algorithm>
+#define MAXN 100001
+#define MAXD 201
+using namespace std;
+const int INF=~0u>>2;
+struct Leg{
+    int l,d;
+    bool operator <(const Leg &p)const {return (l>p.l) || (l==p.l && d<p.d);}
+}a[MAXN];
+int n,cnt[MAXD],q[MAXN];
+int getlst(int x) {return (x>2)?((x>>1)+1):x;}
+int getrem(int x,int b) {
+    if (x==1) return 0;
+    else{
+      int lst=getlst(x);
+      if (b>=lst) return 0;
+      else{
+        int c=x-2*b;
+        for (int j=c-1;j<=c+1;j++)
+          if (getlst(x-j)==b) return j;
+        assert(false);
+      }
+    }
+}
+int main() {
+    scanf("%d",&n);
+    for (int i=1;i<=n;i++) scanf("%d",&a[i].l);
+    for (int i=1;i<=n;i++) scanf("%d",&a[i].d);
+    sort(a+1,a+n+1);
+    for (int i=1;i<=n;i++) {
+      cnt[a[i].d]++;
+      q[i]=q[i-1]+a[i].d;
+    }
+    int ans=INF;a[n+1].l=INF;
+    for (int i=1,j=1;i<=n;i++)
+      if (a[i].l!=a[i+1].l) {
+        int tmp=q[j-1],rem=getrem(n-j+1,i-j+1);
+        for (int k=j;k<=i;k++) cnt[a[k].d]--;
+        for (int k=1;k<=200 && rem;k++)
+          if (rem>=cnt[k]) {
+            rem-=cnt[k];
+            tmp+=k*cnt[k];
+          }
+          else{
+            tmp+=rem*k;
+            rem=0;
+          }
+        ans=min(ans,tmp);
+        j=i+1;
+      }
+    printf("%d\n",ans);
+    return 0;
+}
