@@ -1,0 +1,33 @@
+#include <cstdio>
+
+using namespace std;
+
+const int MAXN = 101;
+
+int r, s, p;
+double f[MAXN][MAXN][MAXN];
+
+int main() {
+	scanf("%d%d%d", &r, &s, &p);
+	f[r][s][p] = 1.0;
+	for (int i = r; i >= 0; i--)
+		for (int j = s; j >= 0; j--)
+			for (int k = p; k >= 0; k--) {
+				int sum = i + j + k;
+				if (i && j) {
+					f[i][j - 1][k] += f[i][j][k] * i * j / (i * j + i * k + k * j);
+				}
+				if (i && k) {
+					f[i - 1][j][k] += f[i][j][k] * i * k / (i * j + i * k + k * j);
+				}
+				if (j && k) {
+					f[i][j][k - 1] += f[i][j][k] * j * k / (i * j + i * k + k * j);
+				}
+			}
+	double a = 0, b = 0, c = 0;
+	for (int i = 1; i <= r; i++) a += f[i][0][0];
+	for (int i = 1; i <= s; i++) b += f[0][i][0];
+	for (int i = 1; i <= p; i++) c += f[0][0][i];
+	printf("%.10f %.10f %.10f\n", a, b, c);
+	return 0;
+}
