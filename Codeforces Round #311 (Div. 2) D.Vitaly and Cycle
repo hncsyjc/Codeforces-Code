@@ -1,0 +1,79 @@
+#include <set>
+#include <map>
+#include <queue>
+#include <vector>
+#include <cstdio>
+#include <bitset>
+#include <cstring>
+#include <cassert>
+#include <cstdlib>
+#include <iostream>
+#include <algorithm>
+#include <functional>
+
+#define debug(...) fprintf(stderr, __VA_ARGS__)
+#ifdef WIN32
+	#define LL "%I64d"
+#else
+	#define LL "%lld"
+#endif
+
+#define MAXN 100001
+#define MAXM 200001
+
+using namespace std;
+
+struct edge{
+	int node, next;
+}e[MAXM];
+int n, m, t, tot, h[MAXN], col[MAXN], deg[MAXN], l[MAXN];
+void addedge(int x, int y) {
+	t++; e[t] = (edge){y, h[x]}; h[x] = t;
+	t++; e[t] = (edge){x, h[y]}; h[y] = t;
+}
+void dfs(int x, int b) {
+	col[x] = b; l[++tot] = x;
+	for (int i = h[x]; i; i = e[i].next) {
+		if (col[e[i].node]) continue;
+		dfs(e[i].node, 3 - b);
+	}
+}
+bool check() {
+	for (int j = 1; j <= tot; j++)
+		for (int k = h[l[j]]; k; k = e[k].next)
+			if (col[l[j]] == col[e[k].node]) return false;
+	return true;
+}
+int main() {
+	scanf("%d%d", &n, &m);
+	for (int i = 1; i <= m; i++) {
+		int x, y; scanf("%d%d", &x, &y);
+		addedge(x, y); deg[x]++; deg[y]++;
+	}
+	int maxdeg = 0, cnt = 0;
+	for (int i = 1; i <= n; i++) maxdeg = max(maxdeg, deg[i]);
+	for (int i = 1; i <= n; i++)
+		if (deg[i] == maxdeg) cnt++;
+	if (maxdeg == 0) printf("%d " LL, 3, (long long)cnt * (cnt - 1) * (cnt - 2) / 6);
+	else if (maxdeg == 1) {
+		assert((cnt & 1) == 0);
+		cnt >>= 1;
+		printf("%d " LL, 2, (long long)m * (n - 2));
+	}
+	else{
+		long long ans = 0;
+		for (int i = 1; i <= n; i++) {
+			if (col[i]) continue;
+			tot = 0; dfs(i, 1);
+			if (!check()) return printf("0 1\n"), 0;
+			int black = 0, white = 0;
+			for (int j = 1; j <= tot; j++)
+				if (col[l[j]] == 1) black++;
+				else white++;
+			ans += (long long)black * (black - 1) >> 1;
+			ans += (long long)white * (white - 1) >> 1;
+		}
+		printf("%d " LL, 1, ans);
+	}
+	return 0;
+}
