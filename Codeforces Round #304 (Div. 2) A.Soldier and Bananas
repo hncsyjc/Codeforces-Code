@@ -1,0 +1,15 @@
+#include <cstdio>
+#include <vector>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+int k, n, w;
+
+int main() {
+	scanf("%d%d%d", &k, &n, &w);
+	cout << max(0ll, (long long)(w * (w + 1) >> 1) * k - n) << endl;
+	return 0;
+}
