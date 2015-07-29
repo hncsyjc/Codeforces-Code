@@ -1,0 +1,48 @@
+#include <map>
+#include <cstdio>
+#include <vector>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 10001;
+
+int n, lA, lB, rA, rB, a[MAXN], b[MAXN];
+map<pair<long long, long long>, bool> M;
+
+int main() {
+	scanf("%d", &n);
+	scanf("%d", &rA); lA = 1;
+	for (int i = 1; i <= rA; i++) scanf("%d", a + i);
+	scanf("%d", &rB); lB = 1;
+	for (int i = 1; i <= rB; i++) scanf("%d", b + i);
+	int round = 0;
+	while (true) {
+		round++;
+		if (a[lA] > b[lB]) {
+			a[++rA] = b[lB];
+			a[++rA] = a[lA];
+		}
+		else{
+			b[++rB] = a[lA];
+			b[++rB] = b[lB];
+		}
+		lA++; lB++;
+		if (lA > rA) {
+			printf("%d %d\n", round, 2);
+			break;
+		}
+		else if (lB > rB) {
+			printf("%d %d\n", round, 1);
+			break;
+		}
+		long long hA = 0, hB = 0;
+		for (int i = lA; i <= rA; i++) hA = hA * 10 + a[i];
+		for (int i = lB; i <= rB; i++) hB = hB * 10 + b[i];
+		if (M[make_pair(hA, hB)]) return printf("-1\n"), 0;
+		M[make_pair(hA, hB)] = true;
+	}
+	return 0;
+}
