@@ -1,0 +1,39 @@
+#include <cstdio>
+#include <vector>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXR = 5000001;
+
+int T, g, p[MAXR], ans[MAXR];
+bool vis[MAXR];
+
+int main() {
+	for (int i = 2; i < MAXR; i++) {
+		if (!vis[i]) p[++g] = i;
+		for (int j = 1; j <= g && i * p[j] < MAXR; j++) {
+			vis[i * p[j]] = true;
+			if (i % p[j] == 0) break;
+		}
+	}
+	for (int i = 2; i < MAXR; i++) {
+		ans[i] = ans[i - 1];
+		int tmp = i;
+		for (int j = 1; p[j] * p[j] <= tmp && j <= g; j++) {
+			while (tmp % p[j] == 0) {
+				tmp /= p[j];
+				ans[i]++;
+			}
+		}
+		if (tmp > 1) ans[i]++;
+	}
+	scanf("%d", &T);
+	while (T--) {
+		int x, y; scanf("%d%d", &x, &y);
+		printf("%d\n", ans[x] - ans[y]);
+	}
+	return 0;
+}
