@@ -1,0 +1,27 @@
+#include <cstdio>
+#include <vector>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 10001;
+
+int n, a[MAXN], b[MAXN];
+
+int main() {
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) scanf("%d", a + i); 
+	sort(a + 1, a + n + 1);
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		if (!b[a[i]]) {b[a[i]] = true; continue;}
+		int rem = a[i];
+		for (; b[a[i]]; a[i]++);
+		b[a[i]] = true;
+		ans += a[i] - rem;
+	}
+	printf("%d\n", ans);
+	return 0;
+}
