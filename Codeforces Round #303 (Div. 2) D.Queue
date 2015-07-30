@@ -1,0 +1,23 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 200001;
+
+int n, t[MAXN];
+
+int main() {
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) scanf("%d", t + i);
+	sort(t + 1, t + n + 1);
+	long long sum = 0;
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		if (sum > t[i]) continue;
+		sum += t[i]; ans++;
+	}
+	printf("%d\n", ans);
+	return 0;
+}
