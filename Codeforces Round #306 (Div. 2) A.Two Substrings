@@ -1,0 +1,25 @@
+#include <cstdio>
+#include <string>
+#include <iostream>
+
+using namespace std;
+
+string s, rem;
+
+bool check(string s, string a, string b) {
+	int pos = s.find(a);
+	if (pos == -1) return false;
+	s.erase(0, pos + (int)a.size());
+	pos = s.find(b);
+	if (pos == -1) return false;
+	return true;
+}
+
+int main() {
+	cin >> s; rem = s;
+	if (check(s, "AB", "BA")) return printf("YES\n"), 0;
+	s = rem;
+	if (check(s, "BA", "AB")) return printf("YES\n"), 0;
+	printf("NO\n");
+	return 0;
+}
