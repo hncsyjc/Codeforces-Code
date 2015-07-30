@@ -1,0 +1,46 @@
+#include <cstdio>
+#include <cstring>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 200001;
+
+int n, dp[MAXN][3], p[MAXN], r[MAXN];
+
+void update(int &x, int y) {
+	if (x < y) x = y;
+}
+
+int main() {
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) {
+		scanf("%d%d", p + i, r + i);
+		if (i == 1) {
+			dp[i][0] = dp[i][1] = 1;
+			dp[i][2] = 0;
+		}
+		else{
+			if (p[i] - r[i] > p[i - 1]) {
+				update(dp[i][0], dp[i - 1][0] + 1);
+				update(dp[i][0], dp[i - 1][2] + 1);
+			}
+			if (p[i] - r[i] > p[i - 1] + r[i - 1]) update(dp[i][0], dp[i - 1][1] + 1);
+			
+			update(dp[i][1], dp[i - 1][0] + 1);
+			update(dp[i][1], dp[i - 1][2] + 1);
+			if (p[i - 1] + r[i - 1] < p[i]) update(dp[i][1], dp[i - 1][1] + 1);
+			
+			update(dp[i][2], dp[i - 1][0]);
+			if (p[i - 1] + r[i - 1] < p[i]) update(dp[i][2], dp[i - 1][1]);
+			update(dp[i][2], dp[i - 1][2]);
+		}
+		//printf("I = %d [%d] = %d [%d] = %d [%d] = %d\n", i, 0, dp[i][0], 1, dp[i][1], 2, dp[i][2]);
+	}
+	int ans = 0;
+	ans = max(ans, dp[n][0]);
+	ans = max(ans, dp[n][1]);
+	ans = max(ans, dp[n][2]);
+	printf("%d\n", ans);
+	return 0;
+}
