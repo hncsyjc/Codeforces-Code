@@ -1,0 +1,50 @@
+#include <cstdio>
+#include <cstring>
+
+using namespace std;
+
+const int MAXN = 101;
+const int MAXR = 8;
+
+int tot, px[MAXN][MAXR][MAXN], py[MAXN][MAXR][MAXN], pz[MAXN][MAXR][MAXN];
+bool dp[MAXN][MAXR][MAXN];
+char d[MAXN], ans[MAXN];
+
+int main() {
+	scanf("%s", d + 1);
+	int len = strlen(d + 1);
+	for (int i = 1; i <= len; i++)
+		if (d[i] == '0') {return printf("YES\n0\n"), 0;}
+	dp[0][0][0] = true;
+	for (int i = 0; i < len; i++)
+		for (int j = 0; j < 8; j++) {
+			for (int k = 0; k <= i; k++) {
+				if (!dp[i][j][k]) continue;
+				dp[i + 1][(j * 10 + d[i + 1] - '0') % 8][k + 1] = true;
+				px[i + 1][(j * 10 + d[i + 1] - '0') % 8][k + 1] = i;
+				py[i + 1][(j * 10 + d[i + 1] - '0') % 8][k + 1] = j;
+				pz[i + 1][(j * 10 + d[i + 1] - '0') % 8][k + 1] = k;
+				dp[i + 1][j][k] = true; 
+				px[i + 1][j][k] = i;
+				py[i + 1][j][k] = j;
+				pz[i + 1][j][k] = k;
+			}
+		}
+	for (int i = 1; i <= len; i++)
+		if (dp[len][0][i]) {
+			printf("YES\n");
+			int x = len, y = 0, z = i;
+			while (x != 0) {
+				int ox = x, oy = y, oz = z;
+				if (z != pz[ox][oy][oz]) ans[++tot] = d[x];
+				x = px[ox][oy][oz];
+				y = py[ox][oy][oz];
+				z = pz[ox][oy][oz];
+			}
+			for (int j = tot; j >= 1; j--) printf("%c", ans[j]);
+			printf("\n");
+			return 0;
+		}
+	printf("NO\n");
+	return 0;
+}
