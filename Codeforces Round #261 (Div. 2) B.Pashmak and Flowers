@@ -1,0 +1,28 @@
+#include <cstdio>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 200001;
+
+int n, b[MAXN];
+
+int main() {
+	freopen("B.in", "r", stdin);
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) scanf("%d", b + i);
+	sort(b + 1, b + n + 1);
+	int maxdiff = b[n] - b[1];
+	printf("%d ", maxdiff);
+	long long ans = 0;
+	for (int i = 1; i <= n; i++) {
+		int need = b[i] - maxdiff;
+		int l = lower_bound(b + 1, b + n + 1, need) - b;
+		int r = upper_bound(b + 1, b + n + 1, need) - b;
+		if (r > i) r = i;
+		ans += r - l;
+	}
+	cout << ans << endl;
+	return 0;
+}
