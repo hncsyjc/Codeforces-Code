@@ -1,0 +1,32 @@
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+
+using namespace std;
+
+const int MAXN = 1000001;
+
+int n, a[MAXN], l[MAXN], f[MAXN], g[MAXN], b[MAXN], cnt[MAXN];
+
+int main() {
+	freopen("D.in", "r", stdin);
+	scanf("%d", &n);
+	for (int i = 1; i <= n; i++) scanf("%d", a + i), l[i] = a[i];
+	sort(l + 1, l + n + 1);
+	int tot = unique(l + 1, l + n + 1) - l - 1;
+	for (int i = 1; i <= n; i++) {
+		a[i] = lower_bound(l + 1, l + n + 1, a[i]) - l;
+		f[i] = ++cnt[a[i]];
+	}
+	memset(cnt, 0, sizeof(cnt));
+	for (int i = n; i >= 1; i--) g[i] = ++cnt[a[i]];
+	long long ans = 0;
+	for (int i = 1; i <= n; i++) {
+		for (int j = n; j; j -= j & -j) ans += b[j];
+		for (int j = g[i]; j; j -= j & -j) ans -= b[j];
+		for (int j = f[i]; j <= n; j += j & -j) b[j]++;
+	}
+	cout << ans << endl;
+	return 0;
+}
