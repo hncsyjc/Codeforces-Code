@@ -1,0 +1,42 @@
+#include <cstdio>
+#include <queue>
+#include <map>
+
+using namespace std;
+
+struct Heapnode{
+	int node, deg;
+	bool operator <(const Heapnode &p)const {return deg < p.deg;}
+};
+
+int k, deg[100001];
+
+priority_queue<Heapnode> heap;
+
+map<pair<int, int>, bool> M;
+
+int main() {
+	freopen("D.in", "r", stdin);
+	freopen("D.out", "w", stdout);
+	scanf("%d", &k);
+	if (k & 1 ^ 1) return printf("NO\n"), 0;
+	int n = 2 * k - 1;
+	int m = n * k;
+	printf("YES\n");
+	printf("%d %d\n", n * 2, m);
+	printf("%d %d\n", 1, n + 1);
+	for (int i = 1; i < k; i++) {
+		int now = i + 1;
+		printf("%d %d\n", 1, now);
+		printf("%d %d\n", n + 1, n + now);
+		for (int j = 1; j < k; j++) {
+			printf("%d %d\n", now, k + j);
+			printf("%d %d\n", n + now, n + k + j);
+		}
+	}
+	for (int i = 1; i < k; i += 2) {
+		printf("%d %d\n", k + i, k + i + 1);
+		printf("%d %d\n", n + k + i, n + k + i + 1);
+	}
+	return 0;
+}
